@@ -6,6 +6,7 @@ import { gl } from './GLUtilities';
 export default class Shader {
   private _name: string;
   private _program: WebGLProgram;
+  private _attributes: { [name: string]: number } = {};
 
   /**
    * Creates a new shader
@@ -19,6 +20,7 @@ export default class Shader {
     const fragmentShader = this.loadShader(fragmentSource, gl.FRAGMENT_SHADER);
 
     this.createProgram(vertexShader, fragmentShader);
+    this.detectAttributes();
   }
 
   /**
@@ -33,6 +35,18 @@ export default class Shader {
    */
   public use(): void {
     gl.useProgram(this._program);
+  }
+
+  /**
+   * Get the location of a shader attribute by its name.
+   * @param name The name of the attribute which you want to retrieve the location for
+   * @returns Attribute location
+   */
+  public getAttributeLocation(name: string): number {
+    if (this._attributes[name] == undefined) {
+      throw new Error(`Unable to find attribute named '${name}' in shader '${this.name}'`);
+    }
+    return this._attributes[name];
   }
 
   private loadShader(source: string, shaderType: number): WebGLShader {
@@ -65,6 +79,25 @@ export default class Shader {
     const error = gl.getProgramInfoLog(this._program);
     if (error !== '') {
       throw new Error(`Error linking shader '${this._name}':  ${error}`);
+    }
+  }
+
+  /**
+   * Get all attributes from the shader and save off their name and location {name:location}
+   */
+  private detectAttributes(): void {
+    const attributeCount = gl.getProgramParameter(this._program, gl.ACTIVE_ATTRIBUTES);
+
+    for (let i = 0; i < attributeCount; i++) {
+      const attributeInfo = gl.getActiveAttrib(this._program, i);
+      if (!attributeInfo) {
+        break;
+      }
+
+      this._attributes[attributeInfo.name] = gl.getAttribLocation(
+        this._program,
+        attributeInfo.name
+      );
     }
   }
 }
