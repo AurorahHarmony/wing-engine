@@ -1,28 +1,7 @@
-namespace WingEngine {
-  export class Engine {
-    private _count = 0;
+import Engine from './Engine';
 
-    public constructor() {
-      console.log('Loaded');
-    }
-
-    public start(): void {
-      this.loop();
-    }
-
-    public loop(): void {
-      document.title = this._count.toString();
-
-      requestAnimationFrame(this.loop.bind(this));
-    }
-  }
-}
-
-window.onload = (): void => {
-  const e = new WingEngine.Engine();
-  e.start();
-
-  document.body.innerHTML += 'foo';
+// The main entry point to the application
+window.onload = function (): void {
+  const engine = new Engine();
+  engine.start();
 };
-
-export {};
