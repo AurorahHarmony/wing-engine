@@ -7,6 +7,7 @@ export default class Shader {
   private _name: string;
   private _program: WebGLProgram;
   private _attributes: { [name: string]: number } = {};
+  private _uniforms: { [name: string]: WebGLUniformLocation } = {};
 
   /**
    * Creates a new shader
@@ -21,6 +22,7 @@ export default class Shader {
 
     this.createProgram(vertexShader, fragmentShader);
     this.detectAttributes();
+    this.detectUniforms();
   }
 
   /**
@@ -47,6 +49,13 @@ export default class Shader {
       throw new Error(`Unable to find attribute named '${name}' in shader '${this.name}'`);
     }
     return this._attributes[name];
+  }
+
+  public getUniformLocation(name: string): WebGLUniformLocation {
+    if (this._uniforms[name] == undefined) {
+      throw new Error(`Unable to find uniform named '${name}' in shader '${this.name}'`);
+    }
+    return this._uniforms[name];
   }
 
   private loadShader(source: string, shaderType: number): WebGLShader {
@@ -89,15 +98,28 @@ export default class Shader {
     const attributeCount = gl.getProgramParameter(this._program, gl.ACTIVE_ATTRIBUTES);
 
     for (let i = 0; i < attributeCount; i++) {
-      const attributeInfo = gl.getActiveAttrib(this._program, i);
-      if (!attributeInfo) {
+      const info = gl.getActiveAttrib(this._program, i);
+      if (!info) {
         break;
       }
 
-      this._attributes[attributeInfo.name] = gl.getAttribLocation(
-        this._program,
-        attributeInfo.name
-      );
+      this._attributes[info.name] = gl.getAttribLocation(this._program, info.name);
+    }
+  }
+
+  /**
+   * Get all uniforms from the shader and save off their name and location {name:location}
+   */
+  private detectUniforms(): void {
+    const uniformCount = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
+
+    for (let i = 0; i < uniformCount; i++) {
+      const info = gl.getActiveUniform(this._program, i);
+      if (!info) {
+        break;
+      }
+
+      this._uniforms[info.name] = gl.getUniformLocation(this._program, info.name);
     }
   }
 }
