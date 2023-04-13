@@ -38,8 +38,8 @@ export default class Engine {
     this._projection = Matrix4x4.orthographic(
       0,
       this._canvas.width,
-      0,
       this._canvas.height,
+      0,
       -100,
       100
     );
@@ -58,7 +58,16 @@ export default class Engine {
       this._canvas.width = window.innerWidth;
       this._canvas.height = window.innerHeight;
 
-      gl.viewport(-1, 1, -1, 1);
+      this._projection = Matrix4x4.orthographic(
+        0,
+        this._canvas.width,
+        this._canvas.height,
+        0,
+        -100,
+        100
+      );
+
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     }
   }
 
