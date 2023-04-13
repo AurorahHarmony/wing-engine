@@ -1,4 +1,5 @@
 import GLBuffer, { AttributeInfo } from '../gl/GLBuffer';
+import Vector3 from '../math/Vector3';
 
 /**
  * Handles loading a new sprite into the GLBuffer and drawing it.
@@ -9,6 +10,8 @@ export default class Sprite {
   private _name: string;
 
   private _buffer: GLBuffer;
+
+  public position: Vector3 = new Vector3();
 
   /**
    * Constructs a new sprite

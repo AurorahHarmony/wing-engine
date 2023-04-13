@@ -1,3 +1,5 @@
+import Vector3 from './Vector3';
+
 /**
  * Helper class to generate useful 4x4 Matrices
  */
@@ -7,7 +9,7 @@ export default class Matrix4x4 {
   private constructor() {
     // prettier-ignore
     this._data = [
-      1, 0, 0, 0,//
+      1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
       0, 0, 0, 1,
@@ -53,9 +55,19 @@ export default class Matrix4x4 {
     m._data[5] = -2.0 * bt;
     m._data[10] = 2.0 * nf;
 
-    m._data[12] = (left + top) * lr;
+    m._data[12] = (left + right) * lr;
     m._data[13] = (top + bottom) * bt;
     m._data[14] = (farClip + nearClip) * nf;
+
+    return m;
+  }
+
+  public static translation(position: Vector3): Matrix4x4 {
+    const m = new Matrix4x4();
+
+    m._data[12] = position.x;
+    m._data[13] = position.y;
+    m._data[14] = position.z;
 
     return m;
   }
