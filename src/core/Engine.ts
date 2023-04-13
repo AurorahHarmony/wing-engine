@@ -18,9 +18,7 @@ export default class Engine {
   /**
    * Create a new engine
    */
-  public constructor() {
-    console.log('Loaded!');
-  }
+  public constructor() {}
 
   /**
    * Starts up the game engine
