@@ -9,7 +9,7 @@ export default class MessageBus {
   private static _subscriptions: { [code: string]: IMessageHandler[] } = {};
 
   private static _normalQueueMessagePerUpdate = 10;
-  private static _normalMessageQueue: MessageSubscriptionNode[];
+  private static _normalMessageQueue: MessageSubscriptionNode[] = [];
 
   private constructor() {} // Hide constructor
 
