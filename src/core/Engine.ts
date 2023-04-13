@@ -1,6 +1,9 @@
 import AssetManager from './assets/AssetManager';
 import { gl, GLUtilities } from './gl/GLUtilities';
-import Shader from './gl/Shader';
+import BasicShader from './gl/shaders/BasicShader';
+import Color from './graphics/Color';
+import Material from './graphics/Material';
+import MaterialManager from './graphics/MaterialManager';
 import Sprite from './graphics/Sprite';
 import Matrix4x4 from './math/Matrix4x4';
 import MessageBus from './message/MessageBus';
@@ -10,7 +13,7 @@ import MessageBus from './message/MessageBus';
  */
 export default class Engine {
   private _canvas: HTMLCanvasElement;
-  private _shader: Shader;
+  private _basicShader: BasicShader;
   private _projection: Matrix4x4;
 
   private _sprite: Sprite;
@@ -29,8 +32,13 @@ export default class Engine {
 
     gl.clearColor(0, 0, 0, 1);
 
-    this.loadShaders();
-    this._shader.use();
+    this._basicShader = new BasicShader();
+    this._basicShader.use();
+
+    // Load Materials
+    MaterialManager.registerMaterial(
+      new Material('test', '/src/assets/textures/a-square.jpg', Color.white())
+    );
 
     // Load
     this._projection = Matrix4x4.orthographic(
@@ -41,7 +49,7 @@ export default class Engine {
       -100,
       100
     );
-    this._sprite = new Sprite('test', '/src/assets/textures/a-square.jpg');
+    this._sprite = new Sprite('test', 'test');
     this._sprite.load();
     this._sprite.position.x = 200;
 
@@ -75,53 +83,11 @@ export default class Engine {
     gl.clear(gl.COLOR_BUFFER_BIT); // Clear the color buffer.
 
     //Set uniforms
-    const colorPosition = this._shader.getUniformLocation('u_tint');
-    // gl.uniform4f(colorPosition, 1, 0, 1, 1);
-    gl.uniform4f(colorPosition, 1, 1, 1, 1);
-
-    const projectionPosition = this._shader.getUniformLocation('u_projection');
+    const projectionPosition = this._basicShader.getUniformLocation('u_projection');
     gl.uniformMatrix4fv(projectionPosition, false, new Float32Array(this._projection.data));
 
-    const modelLocation = this._shader.getUniformLocation('u_model');
-    gl.uniformMatrix4fv(
-      modelLocation,
-      false,
-      new Float32Array(Matrix4x4.translation(this._sprite.position).data)
-    );
-
-    this._sprite.draw(this._shader);
+    this._sprite.draw(this._basicShader);
 
     requestAnimationFrame(this.loop.bind(this));
-  }
-
-  private loadShaders(): void {
-    const vertexShaderSource = `
-      attribute vec3 a_position;
-      attribute vec2 a_texCoord;
-
-      uniform mat4 u_projection;
-      uniform mat4 u_model;
-
-      varying vec2 v_texCoord;
-
-      void main() {
-        gl_Position = u_projection * u_model * vec4(a_position, 1.0);
-        v_texCoord = a_texCoord;
-      }
-    `;
-
-    const fragmentShaderSource = `
-      precision mediump float;
-
-      uniform vec4 u_tint;
-      uniform sampler2D u_diffuse;
-
-      varying vec2 v_texCoord;
-
-      void main() {
-        gl_FragColor = u_tint * texture2D(u_diffuse, v_texCoord);
-      }
-    `;
-    this._shader = new Shader('basic', vertexShaderSource, fragmentShaderSource);
   }
 }
