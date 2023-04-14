@@ -28,6 +28,7 @@ export default class Engine {
   public start(): void {
     this._canvas = GLUtilities.initialize();
     AssetManager.initialize();
+    ZoneManager.initialize();
 
     gl.clearColor(0, 0, 0, 1);
 
@@ -39,8 +40,6 @@ export default class Engine {
       new Material('test', '/src/assets/textures/a-square.jpg', Color.white())
     );
 
-    const zoneID = ZoneManager.createTestZone();
-
     // Load
     this._projection = Matrix4x4.orthographic(
       0,
@@ -51,7 +50,8 @@ export default class Engine {
       100
     );
 
-    ZoneManager.changeZone(zoneID);
+    // TODO: Change to be read from a configuration
+    ZoneManager.changeZone(0);
 
     this.loop();
   }
