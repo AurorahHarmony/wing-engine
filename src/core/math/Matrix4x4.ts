@@ -62,6 +62,10 @@ export default class Matrix4x4 {
     return m;
   }
 
+  /**
+   * Creates a transformation matrix using the provided position
+   * @param position The position to be used in the transformation
+   */
   public static translation(position: Vector3): Matrix4x4 {
     const m = new Matrix4x4();
 
@@ -72,6 +76,46 @@ export default class Matrix4x4 {
     return m;
   }
 
+  /**
+   * Creates a rotation matrix on the X axis from the angle provided in radians
+   * @param angleInRadians The angle to rotate in radians
+   */
+  public static rotationX(angleInRadians: number): Matrix4x4 {
+    const m = new Matrix4x4();
+
+    const c = Math.cos(angleInRadians);
+    const s = Math.sin(angleInRadians);
+
+    m._data[5] = c;
+    m._data[6] = s;
+    m._data[9] = -s;
+    m._data[10] = c;
+
+    return m;
+  }
+
+  /**
+   * Creates a rotation matrix on the Y axis from the angle provided in radians
+   * @param angleInRadians The angle to rotate in radians
+   */
+  public static rotationY(angleInRadians: number): Matrix4x4 {
+    const m = new Matrix4x4();
+
+    const c = Math.cos(angleInRadians);
+    const s = Math.sin(angleInRadians);
+
+    m._data[0] = c;
+    m._data[2] = -s;
+    m._data[8] = s;
+    m._data[10] = c;
+
+    return m;
+  }
+
+  /**
+   * Creates a rotation matrix on the Z axis from the angle provided in radians
+   * @param angleInRadians The angle to rotate in radians
+   */
   public static rotationZ(angleInRadians: number): Matrix4x4 {
     const m = new Matrix4x4();
 
@@ -80,10 +124,26 @@ export default class Matrix4x4 {
 
     m._data[0] = c;
     m._data[1] = s;
-    m._data[5] = -s;
-    m._data[6] = c;
+    m._data[4] = -s;
+    m._data[5] = c;
 
     return m;
+  }
+
+  /**
+   * Creates a rotation matrix from the provided angles in radians.
+   * @param xRadians The angle to rotate in radians on the X axis.
+   * @param yRadians The angle to rotate in radians on the Y axis.
+   * @param zRadians The angle to rotate in radians on the Z axis.
+   * @returns
+   */
+  public static rotationXYZ(xRadians: number, yRadians: number, zRadians: number): Matrix4x4 {
+    const rx = Matrix4x4.rotationX(xRadians);
+    const ry = Matrix4x4.rotationY(yRadians);
+    const rz = Matrix4x4.rotationZ(zRadians);
+
+    // ZYX
+    return Matrix4x4.multiply(Matrix4x4.multiply(rz, ry), rx);
   }
 
   public static scale(scale: Vector3): Matrix4x4 {
@@ -96,6 +156,11 @@ export default class Matrix4x4 {
     return m;
   }
 
+  /**
+   * Multiplies to Matrix4x4s and returns the result
+   * @param a The first Matrix
+   * @param b The second Matrix
+   */
   public static multiply(a: Matrix4x4, b: Matrix4x4): Matrix4x4 {
     const m = new Matrix4x4();
 
@@ -150,5 +215,17 @@ export default class Matrix4x4 {
     m._data[15] = b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33;
 
     return m;
+  }
+
+  /** Converts this Matrix4x4 to a Float32Array */
+  public toFloat32Array(): Float32Array {
+    return new Float32Array(this._data);
+  }
+
+  /** Copy the values from another Matrix4x4 into this Matrix4x4 */
+  public copyFrom(m: Matrix4x4): void {
+    for (let i = 0; i < 16; ++i) {
+      this._data[i] = m._data[i];
+    }
   }
 }

@@ -7,6 +7,7 @@ import MaterialManager from './graphics/MaterialManager';
 import Sprite from './graphics/Sprite';
 import Matrix4x4 from './math/Matrix4x4';
 import MessageBus from './message/MessageBus';
+import ZoneManager from './world/ZoneManager';
 
 /**
  * The main game engine class
@@ -15,8 +16,6 @@ export default class Engine {
   private _canvas: HTMLCanvasElement;
   private _basicShader: BasicShader;
   private _projection: Matrix4x4;
-
-  private _sprite: Sprite;
 
   /**
    * Create a new engine
@@ -40,6 +39,8 @@ export default class Engine {
       new Material('test', '/src/assets/textures/a-square.jpg', Color.white())
     );
 
+    const zoneID = ZoneManager.createTestZone();
+
     // Load
     this._projection = Matrix4x4.orthographic(
       0,
@@ -49,9 +50,8 @@ export default class Engine {
       -100,
       100
     );
-    this._sprite = new Sprite('test', 'test');
-    this._sprite.load();
-    this._sprite.position.x = 200;
+
+    ZoneManager.changeZone(zoneID);
 
     this.loop();
   }
@@ -80,13 +80,15 @@ export default class Engine {
   private loop(): void {
     MessageBus.update(0);
 
+    ZoneManager.update(0);
+
     gl.clear(gl.COLOR_BUFFER_BIT); // Clear the color buffer.
+
+    ZoneManager.render(this._basicShader);
 
     //Set uniforms
     const projectionPosition = this._basicShader.getUniformLocation('u_projection');
     gl.uniformMatrix4fv(projectionPosition, false, new Float32Array(this._projection.data));
-
-    this._sprite.draw(this._basicShader);
 
     requestAnimationFrame(this.loop.bind(this));
   }

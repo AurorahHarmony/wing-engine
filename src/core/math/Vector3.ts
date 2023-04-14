@@ -42,6 +42,16 @@ export default class Vector3 {
     this._z = value;
   }
 
+  /** Create a new zero Vector3 (0,0,0) */
+  public static get zero(): Vector3 {
+    return new Vector3(0, 0, 0);
+  }
+
+  /** Create a new one Vector3 (1,1,1) */
+  public static get one(): Vector3 {
+    return new Vector3(1, 1, 1);
+  }
+
   /**
    * Convert the Vector3 struct to an array
    * @returns {number[]} [x,y,z]
@@ -56,5 +66,10 @@ export default class Vector3 {
    */
   public toFloat32Array(): Float32Array {
     return new Float32Array(this.toArray());
+  }
+  public copyFrom(vector: Vector3): void {
+    this._x = vector._x;
+    this._y = vector._y;
+    this._z = vector._z;
   }
 }
