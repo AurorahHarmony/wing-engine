@@ -1,3 +1,4 @@
+import BehaviorManager from '../behavours/BehaviorManager';
 import ComponentManager from '../components/ComponentManager';
 import Shader from '../gl/Shader';
 import Scene from './Scene';
@@ -96,6 +97,14 @@ export default class Zone {
         const data = dataSection.components[i];
         const component = ComponentManager.extractComponent(data);
         simObject.addComponent(component);
+      }
+    }
+
+    if (dataSection.behaviors !== undefined) {
+      for (const i in dataSection.behaviors) {
+        const data = dataSection.behaviors[i];
+        const behavior = BehaviorManager.extractBehavior(data);
+        simObject.addBehavior(behavior);
       }
     }
 

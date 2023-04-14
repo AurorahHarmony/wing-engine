@@ -1,4 +1,6 @@
 import AssetManager from './assets/AssetManager';
+import BehaviorManager from './behavours/BehaviorManager';
+import { RotationBehaviourBuilder } from './behavours/RotationBehavior';
 import ComponentManager from './components/ComponentManager';
 import { SpriteComponentBuilder } from './components/SpriteComponent';
 import { gl, GLUtilities } from './gl/GLUtilities';
@@ -6,7 +8,6 @@ import BasicShader from './gl/shaders/BasicShader';
 import Color from './graphics/Color';
 import Material from './graphics/Material';
 import MaterialManager from './graphics/MaterialManager';
-import Sprite from './graphics/Sprite';
 import Matrix4x4 from './math/Matrix4x4';
 import MessageBus from './message/MessageBus';
 import ZoneManager from './world/ZoneManager';
@@ -34,6 +35,9 @@ export default class Engine {
 
     // Register components
     ComponentManager.registerBuilder(new SpriteComponentBuilder());
+
+    // Register Behaviors
+    BehaviorManager.registerBuilder(new RotationBehaviourBuilder());
 
     gl.clearColor(0, 0, 0, 1);
 

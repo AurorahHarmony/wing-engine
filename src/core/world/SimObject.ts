@@ -1,3 +1,4 @@
+import IBehavior from '../behavours/IBehavior';
 import IComponent from '../components/IComponent';
 import Shader from '../gl/Shader';
 import Matrix4x4 from '../math/Matrix4x4';
@@ -11,6 +12,7 @@ export default class SimObject {
   private _isLoaded = false;
   private _scene: Scene;
   private _components: IComponent[] = [];
+  private _behaviors: IBehavior[] = [];
 
   private _localMatrix: Matrix4x4 = Matrix4x4.identity();
   private _worldMatrix: Matrix4x4 = Matrix4x4.identity();
@@ -77,6 +79,15 @@ export default class SimObject {
     component.setOwner(this);
   }
 
+  /**
+   * Add a behavior to this SimObject
+   * @param behavior
+   */
+  public addBehavior(behavior: IBehavior): void {
+    this._behaviors.push(behavior);
+    behavior.setOwner(this);
+  }
+
   public load(): void {
     this._isLoaded = true;
 
@@ -95,6 +106,10 @@ export default class SimObject {
 
     for (const c of this._components) {
       c.update(time);
+    }
+
+    for (const b of this._behaviors) {
+      b.update(time);
     }
 
     for (const c of this._children) {

@@ -73,6 +73,10 @@ export default class Vector3 {
     this._z = vector._z;
   }
 
+  /**
+   * Set the x y and/or z values with json.
+   * @param json The json input
+   */
   public setFromJson(json: any): void {
     if (json.x !== undefined) {
       this._x = Number(json.x);
@@ -83,5 +87,53 @@ export default class Vector3 {
     if (json.z !== undefined) {
       this._z = Number(json.z);
     }
+  }
+
+  /**
+   * Adds the provided Vector3 with this one.
+   * @param v A Vector3
+   */
+  public add(v: Vector3): Vector3 {
+    this._x += v._x;
+    this._y += v._y;
+    this._z += v._z;
+
+    return this;
+  }
+
+  /**
+   * Subtracts the provided Vector3 with this one.
+   * @param v A Vector3
+   */
+  public subtract(v: Vector3): Vector3 {
+    this._x -= v._x;
+    this._y -= v._y;
+    this._z -= v._z;
+
+    return this;
+  }
+
+  /**
+   * Multiplies the provided Vector3 with this one.
+   * @param v A Vector3
+   */
+  public multiply(v: Vector3): Vector3 {
+    this._x *= v._x;
+    this._y *= v._y;
+    this._z *= v._z;
+
+    return this;
+  }
+
+  /**
+   * Divides the provided Vector3 with this one.
+   * @param v A Vector3
+   */
+  public divide(v: Vector3): Vector3 {
+    this._x /= v._x;
+    this._y /= v._y;
+    this._z /= v._z;
+
+    return this;
   }
 }
