@@ -1,3 +1,4 @@
+import ComponentManager from '../components/ComponentManager';
 import Shader from '../gl/Shader';
 import Scene from './Scene';
 import SimObject from './SimObject';
@@ -88,6 +89,14 @@ export default class Zone {
 
     if (dataSection.transform !== undefined) {
       simObject.transform.setFromJson(dataSection.transform);
+    }
+
+    if (dataSection.components !== undefined) {
+      for (const i in dataSection.components) {
+        const data = dataSection.components[i];
+        const component = ComponentManager.extractComponent(data);
+        simObject.addComponent(component);
+      }
     }
 
     if (dataSection.children !== undefined) {

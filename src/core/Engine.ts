@@ -1,4 +1,6 @@
 import AssetManager from './assets/AssetManager';
+import ComponentManager from './components/ComponentManager';
+import { SpriteComponentBuilder } from './components/SpriteComponent';
 import { gl, GLUtilities } from './gl/GLUtilities';
 import BasicShader from './gl/shaders/BasicShader';
 import Color from './graphics/Color';
@@ -29,6 +31,9 @@ export default class Engine {
     this._canvas = GLUtilities.initialize();
     AssetManager.initialize();
     ZoneManager.initialize();
+
+    // Register components
+    ComponentManager.registerBuilder(new SpriteComponentBuilder());
 
     gl.clearColor(0, 0, 0, 1);
 

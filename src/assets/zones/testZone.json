@@ -7,8 +7,8 @@
       "name": "parentObject",
       "transform": {
         "position": {
-          "x": 300,
-          "y": 300
+          "x": 100,
+          "y": 100
         }
       },
       "children": [
@@ -16,10 +16,24 @@
           "name": "testObject",
           "transform": {
             "position": {
-              "x": 120,
-              "y": 120
+              "x": 100,
+              "y": 100
             }
-          }
+          },
+          "components": [
+            {
+              "name": "test",
+              "type": "sprite",
+              "materialName": "test"
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "name": "test",
+          "type": "sprite",
+          "materialName": "test"
         }
       ]
     }
