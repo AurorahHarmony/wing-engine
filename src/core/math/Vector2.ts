@@ -31,6 +31,16 @@ export default class Vector2 {
     this._y = value;
   }
 
+  /** Create a new zero Vector2 (0,0,0) */
+  public static get zero(): Vector2 {
+    return new Vector2(0, 0);
+  }
+
+  /** Create a new one Vector2 (1,1,1) */
+  public static get one(): Vector2 {
+    return new Vector2(1, 1);
+  }
+
   /**
    * Convert the Vector3 struct to an array
    * @returns {number[]} [x,y,z]
