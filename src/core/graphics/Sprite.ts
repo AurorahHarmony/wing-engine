@@ -49,17 +49,15 @@ export default class Sprite {
    * Load this sprite into a GLBuffer.
    */
   public load(): void {
-    this._buffer = new GLBuffer(5);
+    this._buffer = new GLBuffer();
 
     const positionAttribute = new AttributeInfo();
     positionAttribute.location = 0;
-    positionAttribute.offset = 0;
     positionAttribute.size = 3;
     this._buffer.addAttributeLocation(positionAttribute);
 
     const texCoordAttribute = new AttributeInfo();
     texCoordAttribute.location = 1;
-    texCoordAttribute.offset = 3;
     texCoordAttribute.size = 2;
     this._buffer.addAttributeLocation(texCoordAttribute);
 
