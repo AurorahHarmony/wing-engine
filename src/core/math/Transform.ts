@@ -36,10 +36,10 @@ export default class Transform {
       this.position.setFromJson(json.position);
     }
     if (json.rotation !== undefined) {
-      this.rotation.setFromJson(json.position);
+      this.rotation.setFromJson(json.rotation);
     }
     if (json.scale !== undefined) {
-      this.scale.setFromJson(json.position);
+      this.scale.setFromJson(json.scale);
     }
   }
 }
