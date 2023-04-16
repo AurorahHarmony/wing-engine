@@ -4,6 +4,30 @@
   "description": "A simple test zone for testing",
   "objects": [
     {
+      "name": "triangle",
+      "transform": {
+        "position": {
+          "x": 400,
+          "y": 200
+        },
+        "scale": {
+          "x": 10,
+          "y": 10
+        }
+      },
+      "components": [
+        {
+          "name": "duckAnimatedSprite",
+          "type": "animatedsprite",
+          "materialName": "animated",
+          "frameWidth": "20",
+          "frameHeight": "20",
+          "frameCount": "5",
+          "frameSequence": [0, 1, 2, 3, 4]
+        }
+      ]
+    },
+    {
       "name": "parentObject",
       "transform": {
         "position": {

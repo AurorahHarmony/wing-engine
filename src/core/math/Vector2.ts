@@ -65,4 +65,9 @@ export default class Vector2 {
       this._y = Number(json.y);
     }
   }
+
+  public copyFrom(v: Vector2): void {
+    this._x = v._x;
+    this._y = v._y;
+  }
 }

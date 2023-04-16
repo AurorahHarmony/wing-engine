@@ -4,18 +4,20 @@ import Shader from '../gl/Shader';
 import Matrix4x4 from '../math/Matrix4x4';
 import Material from './Material';
 import MaterialManager from './MaterialManager';
+import Vertex from './Vertex';
 
 /**
  * Handles loading a new sprite into the GLBuffer and drawing it.
  */
 export default class Sprite {
-  private _width: number;
-  private _height: number;
-  private _name: string;
+  protected _width: number;
+  protected _height: number;
+  protected _name: string;
 
-  private _buffer: GLBuffer;
-  private _materialName: string;
-  private _material: Material;
+  protected _buffer: GLBuffer;
+  protected _materialName: string;
+  protected _material: Material;
+  protected _vertices: Vertex[];
 
   /**
    * Constructs a new sprite
@@ -61,18 +63,19 @@ export default class Sprite {
     texCoordAttribute.size = 2;
     this._buffer.addAttributeLocation(texCoordAttribute);
 
-    //prettier-ignore
-    const vertices = [
-      // x,        y,            z, u,   v
-      0,           0,            0, 0,   0,
-      0,           this._height, 0, 0,   1.0,
-      this._width, this._height, 0, 1.0, 1.0,
+    this._vertices = [
+      new Vertex(0, 0, 0, 0, 0),
+      new Vertex(0, this._height, 0, 0, 1.0),
+      new Vertex(this._width, this._height, 0, 1.0, 1.0),
 
-      this._width, this._height, 0, 1.0, 1.0,
-      this._width, 0,            0, 1.0, 0,
-      0,           0,            0, 0,   0
+      new Vertex(this._width, this._height, 0, 1.0, 1.0),
+      new Vertex(this._width, 0, 0, 1.0, 0),
+      new Vertex(0, 0, 0, 0, 0),
     ];
-    this._buffer.pushBackData(vertices);
+
+    for (const v of this._vertices) {
+      this._buffer.pushBackData(v.toArray());
+    }
     this._buffer.upload();
     this._buffer.unbind();
   }
