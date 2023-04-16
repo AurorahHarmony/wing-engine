@@ -62,6 +62,15 @@ export default class Engine {
     // TODO: Change to be read from a configuration
     ZoneManager.changeZone(0);
 
+    // Load Materials
+    MaterialManager.registerMaterial(
+      new Material('test', '/src/assets/textures/a-square.jpg', Color.white())
+    );
+
+    MaterialManager.registerMaterial(
+      new Material('animated', '/src/assets/textures/rotating-triangle.png', Color.white())
+    );
+
     this.loop();
   }
 
