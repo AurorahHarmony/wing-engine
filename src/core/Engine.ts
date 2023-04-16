@@ -10,15 +10,17 @@ import BasicShader from './gl/shaders/BasicShader';
 import Color from './graphics/Color';
 import Material from './graphics/Material';
 import MaterialManager from './graphics/MaterialManager';
-import InputManager from './input/InputManager';
+import InputManager, { MouseContext } from './input/InputManager';
 import Matrix4x4 from './math/Matrix4x4';
+import IMessageHandler from './message/IMessageHandler';
+import Message from './message/Message';
 import MessageBus from './message/MessageBus';
 import ZoneManager from './world/ZoneManager';
 
 /**
  * The main game engine class
  */
-export default class Engine {
+export default class Engine implements IMessageHandler {
   private _canvas: HTMLCanvasElement;
   private _basicShader: BasicShader;
   private _projection: Matrix4x4;
@@ -37,6 +39,8 @@ export default class Engine {
     AssetManager.initialize();
     InputManager.initialize();
     ZoneManager.initialize();
+
+    Message.subscribe('MOUSE_UP', this);
 
     // Register components
     ComponentManager.registerBuilder(new SpriteComponentBuilder());
@@ -96,6 +100,13 @@ export default class Engine {
       );
 
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    }
+  }
+
+  onMessage(message: Message): void {
+    if (message.code === 'MOUSE_UP') {
+      const context = message.context as MouseContext;
+      console.log(context.position);
     }
   }
 
