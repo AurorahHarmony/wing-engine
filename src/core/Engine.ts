@@ -1,5 +1,6 @@
 import AssetManager from './assets/AssetManager';
 import BehaviorManager from './behavours/BehaviorManager';
+import { KeyboardMovementBehaviorBuilder } from './behavours/KeyboardMovementBehavior';
 import { RotationBehaviourBuilder } from './behavours/RotationBehavior';
 import { AnimatedSpriteComponentBuilder } from './components/AnimatedSpriteComponent';
 import ComponentManager from './components/ComponentManager';
@@ -9,6 +10,7 @@ import BasicShader from './gl/shaders/BasicShader';
 import Color from './graphics/Color';
 import Material from './graphics/Material';
 import MaterialManager from './graphics/MaterialManager';
+import InputManager from './input/InputManager';
 import Matrix4x4 from './math/Matrix4x4';
 import MessageBus from './message/MessageBus';
 import ZoneManager from './world/ZoneManager';
@@ -33,6 +35,7 @@ export default class Engine {
   public start(): void {
     this._canvas = GLUtilities.initialize();
     AssetManager.initialize();
+    InputManager.initialize();
     ZoneManager.initialize();
 
     // Register components
@@ -41,6 +44,7 @@ export default class Engine {
 
     // Register Behaviors
     BehaviorManager.registerBuilder(new RotationBehaviourBuilder());
+    BehaviorManager.registerBuilder(new KeyboardMovementBehaviorBuilder());
 
     gl.clearColor(0, 0, 0, 1);
     gl.enable(gl.BLEND);
